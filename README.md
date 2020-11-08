@@ -10,8 +10,8 @@ Here is the method to build a grid map and get rid of the laser distortion
 ```cpp
 mkdir src
 cd src
-git clone 
-cd OGM
+git clone https://github.com/BIT-MJY/occupancy_grid_mapping.git 
+cd ..
 catkin_make
 roslaunch ogm.launch
 ```
