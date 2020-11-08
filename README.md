@@ -15,6 +15,7 @@ cd ..
 catkin_make
 source devel/setup.bash
 roslaunch occupancy_grid_mapping ogm.launch
+rosbag play --clock 2020-10-25-19-34-25.bag
 ```
 
 ### 参数修改
