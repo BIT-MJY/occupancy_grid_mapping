@@ -7,6 +7,12 @@ Here is the method to build a grid map and get rid of the laser distortion
 
 ### 操作步骤：
 
-1. cd OGM
-2. catkin_make
-3. roslaunch ogm.launch
+```cpp
+mkdir src
+cd src
+git clone 
+cd OGM
+catkin_make
+roslaunch ogm.launch
+```
+aaa
