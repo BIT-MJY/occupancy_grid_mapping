@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <arg name = "map_size_x" default = "500"/>
+  <arg name = "map_size_y" default = "500"/>
+  <arg name = "resolution" default = "0.1"/>
+  <arg name = "calibration" default = "true"/>
+
+  <node pkg="occupancy_grid_mapping" type="main" name="main"  output="screen">
+  	<param name="map_size_x_" value="$(arg map_size_x)"/>
+  	<param name="map_size_y_" value="$(arg map_size_y)"/>
+  	<param name="resolution_" value="$(arg resolution)"/>
+  	<param name="calib" value="$(arg calibration)"/>
+  </node>
+
+</launch>
