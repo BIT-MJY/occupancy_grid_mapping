@@ -1,7 +1,7 @@
 # occupancy_grid_mapping
 Here is the method to build a grid map and get rid of the laser distortion
 
-# 激光雷达去除畸变以及栅格地图的创建
+# 激光雷达去除畸变以及二维栅格地图的创建
 
 ## 20201108 
   提供了一个简短的bag包进行测试。
