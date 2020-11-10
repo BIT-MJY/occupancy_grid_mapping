@@ -8,6 +8,7 @@ Here is the method to build a grid map and get rid of the laser distortion
 
 ### 操作步骤：
 
+####（1）运行主程序
 ```cpp
 mkdir src
 cd src
@@ -16,8 +17,13 @@ cd ..
 catkin_make
 source devel/setup.bash
 roslaunch occupancy_grid_mapping ogm.launch
-rosbag play --clock 2020-10-25-19-34-25.bag
 ```
+####（2）运行测试代码（可选）
+```cpp
+source devel/setup.bash
+roslaunch occupancy_grid_mapping test_ogm.launch
+```
+
 
 ### 参数修改
 ogm.launch中
