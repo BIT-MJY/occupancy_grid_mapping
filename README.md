@@ -8,7 +8,7 @@ Here is the method to build a grid map and get rid of the laser distortion
 
 ### 操作步骤：
 
-####（1）运行主程序
+#### （1）运行主程序
 ```cpp
 mkdir src
 cd src
@@ -16,12 +16,12 @@ git clone https://github.com/BIT-MJY/occupancy_grid_mapping.git
 cd ..
 catkin_make
 source devel/setup.bash
-roslaunch occupancy_grid_mapping ogm.launch
+roslaunch occupancy_grid_mapping ogm.launch bag_filename:=./2020-10-25-19-34-25.bag
 ```
-####（2）运行测试代码（可选）
+#### （2）运行测试代码（可选）
 ```cpp
 source devel/setup.bash
-roslaunch occupancy_grid_mapping test_ogm.launch
+roslaunch occupancy_grid_mapping test_ogm.launch bag_filename:=./2020-10-25-19-34-25.bag
 ```
 
 
