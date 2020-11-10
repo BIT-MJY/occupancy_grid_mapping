@@ -32,3 +32,5 @@ ogm.launch中
 * ``` <arg name = "map_size_y" default = "500"/> ```  y方向栅格数目
 * ``` <arg name = "resolution" default = "0.1"/> ```  分辨率，表示一格为几米
 * ```<arg name = "calibration" default = "true"/> ``` 是否使用激光雷达去除畸变
+
+![占据栅格地图](https://github.com/BIT-MJY/occupancy_grid_mapping/blob/master/OGM/img/calib.jpg)
