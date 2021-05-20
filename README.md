@@ -1,14 +1,14 @@
 # occupancy_grid_mapping
 Here is the method to build a grid map and get rid of the laser distortion
 
-# 激光雷达去除畸变以及二维栅格地图的创建
+# Distortion Removing and 2D grid map building
 
 ## 20201108 
-  提供了一个简短的bag包进行测试。
+  A brief ROS bag for test.
 
-### 操作步骤：
+### Steps：
 
-#### （1）运行主程序  注意bag包给自己电脑上的全路径
+#### （1）Standard Runing
 ```bash
 mkdir src
 cd src
@@ -18,15 +18,15 @@ catkin_make
 source devel/setup.bash
 roslaunch occupancy_grid_mapping ogm.launch bag_filename:=/home/mjy/dev/occupancy_grid_mapping/2020-10-25-19-34-25.bag
 ```
-#### （2）运行测试代码（可选）
+#### （2）Testing
 ```bash
 source devel/setup.bash
 roslaunch occupancy_grid_mapping test_ogm.launch bag_filename:=/home/mjy/dev/occupancy_grid_mapping/2020-10-25-19-34-25.bag
 ```
 
 
-### 参数修改
-ogm.launch中
+### Parameters
+ogm.launch
 
 * ```<arg name = "map_size_x" default = "500"/>  ```  x方向栅格数目
 * ``` <arg name = "map_size_y" default = "500"/> ```  y方向栅格数目
