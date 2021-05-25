@@ -4,7 +4,7 @@ Here is the method to build a grid map and get rid of the laser distortion
 # Distortion Removing and 2D grid map building
 
 ## 20201108 
-  ![A brief ROS bag for test.](https://github.com/BIT-MJY/occupancy_grid_mapping/blob/master/OGM/2020-10-25-19-34-25.bag)
+  [A brief ROS bag for test.](https://github.com/BIT-MJY/occupancy_grid_mapping/blob/master/OGM/2020-10-25-19-34-25.bag)
 
 ### Steps：
 
