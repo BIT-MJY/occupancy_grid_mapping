@@ -34,3 +34,6 @@ ogm.launch
 * ```<arg name = "calibration" default = "true"/> ``` Whether to remove distortion
 
 ![](https://github.com/BIT-MJY/occupancy_grid_mapping/blob/master/OGM/img/calib.jpg)
+
+# Author
+Junyi Ma, Beijing Institute of Technology
