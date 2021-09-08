@@ -7,7 +7,7 @@ Map::Map(int size_x, int size_y, double resolution):size_x(size_x),size_y(size_y
 //     this->size_y = 300;
 //     this->resolution = 0.1;
     this->marker_pub = this->n_.advertise<visualization_msgs::Marker>("visualization_marker", 1);
-    this->grid_map = Eigen::MatrixXd::Zero(this->size_x, this->size_y);    // 初始值0
+    this->grid_map = Eigen::MatrixXd::Zero(this->size_x, this->size_y);   
     
     this->caster.size_x = this->size_x;
     this->caster.size_y = this->size_y;
@@ -16,11 +16,9 @@ Map::Map(int size_x, int size_y, double resolution):size_x(size_x),size_y(size_y
 }
 
 
-// 获得格子坐标
 std::pair<int,int> Map::getCellIndex(double x, double y){
     
     int cell_x, cell_y;
-    // x,y是相对于odom坐标系
     if (x>0){
         cell_x = floor((x + resolution/2)/resolution);
     }
@@ -33,7 +31,6 @@ std::pair<int,int> Map::getCellIndex(double x, double y){
     else{
         cell_y = ceil((y - resolution/2)/resolution);
     }
-    // 超过范围则返回
     if (cell_x < this->size_x && cell_x > -this->size_x && cell_y<this->size_y && cell_y>-this->size_y)
     {
         return  std::pair<int,int>(cell_x, cell_y);
@@ -44,23 +41,21 @@ std::pair<int,int> Map::getCellIndex(double x, double y){
     }
 }
 
-// 射线更新
 void Map::rayCast(double x, double y, tf::Vector3 mid_pose)
 {
     
     std::pair<int, int> cell = this->getCellIndex(x, y);
     std::pair<int, int> cell_base = this->getCellIndex(mid_pose.x(),mid_pose.y());
-    // 检查，使得代码更加健壮
     if (cell.first >  this->size_x || cell.second > this->size_y || cell.first <  -this->size_x || cell.second < -this->size_y)
     {
-        std::cout<<"激光点越界"<<std::endl;
+        std::cout<<"out of range!"<<std::endl;
     }
     else
     {
     //     std::cout<<"hit:"<<cell.first<<", "<<cell.second<<std::endl;
         // visual 
         // showPoint(x, y);
-        // Bresenham画线算法
+        // Bresenham
         caster.updateMap(cell.first, cell.second, cell_base.first, cell_base.second, this->grid_map);
         count2show++;
         if (count2show == 30000)
@@ -102,12 +97,10 @@ void Map::showPoint(double x, double y)
 void Map::showMap()
 {
     Eigen::MatrixXd show_map = Eigen::MatrixXd::Zero(this->size_x, this->size_y); 
-    // 循环，将数值返还为概率
     for (int i=0; i<this->grid_map.rows();i++)
     {
         for (int j=0; j<this->grid_map.cols(); j++)
         {
-            // 返还概率并反转,因为概率越大的颜色应该越深，而0是黑色，255是白色
             show_map(i,j) =1 - (  1-(1/(1+exp(this->grid_map(i, j))))   );
         }
     }
@@ -120,33 +113,29 @@ void Map::showMap()
     if (this->calib)
     {
         cv::imwrite("/home/mjy/dev/occupancy_grid_mapping/calib.jpg", dst2*255);
-        std::cout<<"校正地图保存完毕"<<std::endl;
+        std::cout<<"save the calibrated map!"<<std::endl;
     }
     else
     {
         cv::imwrite("/home/mjy/dev/occupancy_grid_mapping/notcalib.jpg", dst2*255);
-        std::cout<<"未校正地图保存完毕"<<std::endl;
+        std::cout<<"save the normal map!"<<std::endl;
     }
 }
 
 
-// 图像归一至0-255
 cv::Mat Map::normalize(cv::Mat srcImage)
 {
 
 	cv::Mat resultImage = srcImage.clone();
 	int nRows = resultImage.rows;
 	int nCols = resultImage.cols;
-	// 图像连续性判断
 	if(resultImage.isContinuous())
 	{
 		nCols  = nCols  * nRows;
 		nRows = 1;
 	}
-	// 图像指针操作
 	uchar *pDataMat;
 	int pixMax = 0, pixMin = 255;
-	// 计算图像的最大最小值
 	for(int j = 0; j <nRows; j ++)
 	{
 		pDataMat = resultImage.ptr<uchar>(j);
@@ -158,7 +147,6 @@ cv::Mat Map::normalize(cv::Mat srcImage)
 				pixMin = pDataMat[i];
 		}
 	}
-    // 对比度拉伸映射
 	for(int j = 0; j < nRows; j ++)
 	{
 		pDataMat = resultImage.ptr<uchar>(j);
