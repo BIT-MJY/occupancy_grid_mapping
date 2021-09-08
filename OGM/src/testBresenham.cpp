@@ -83,7 +83,7 @@ Tester::Tester(int size_x, int size_y, double resolution, tf::TransformListener 
 
 void Tester::laserCallback(const sensor_msgs::LaserScan &laser_msgs){
     
-    if (cnt++ % 1 != 0)  // 控制回调频率
+    if (cnt++ % 1 != 0) 
     {
         return;
     }
@@ -100,7 +100,6 @@ void Tester::laserCallback(const sensor_msgs::LaserScan &laser_msgs){
     int beamNum = laser_msgs.ranges.size();
     endTime = startTime + ros::Duration(laser_msgs.time_increment * beamNum);
     // loop over laser
-//     std::cout<<"111111111111"<<std::endl;
     for (int i=0; i<beamNum; i++){
 
         Point point;
@@ -126,7 +125,6 @@ void Tester::laserCallback(const sensor_msgs::LaserScan &laser_msgs){
     }
     
     convert2world(this->points, this->tf_);
-//         std::cout<<"33333333333333333"<<std::endl;
     
     showThisFrame();
     
@@ -150,42 +148,33 @@ void Tester::convert2world(std::vector<Point> &points,  tf::TransformListener *t
 //         std::cout<<point.time<<std::endl;
         if (!getLaserPose(odom_pose, point.time, tf_))
         {
-            ROS_ERROR("无法捕获odom与baselink的转换关系");
+            ROS_ERROR("can not look for odom -> baselink");
         }
         tf::Quaternion base_in_odom_angle_q = odom_pose.getRotation();
         double base_in_odom_angle = tf::getYaw(base_in_odom_angle_q);
         tf::Vector3 base_in_odom_pos = odom_pose.getOrigin();
-//         std::cout<<base_in_odom_pos.x()<<", "<<base_in_odom_pos.y()<<std::endl;
-        // 激光雷达坐标系下的坐标
         double laser_x, laser_y;
         laser_x = point.range * cos(point.angle);
         laser_y = point.range * sin(point.angle);
-        // 里程计坐标系下的坐标
-        // 之前的tf::transform的第一个参数为“odom”，证明得到的变换是将其他坐标系的点转换到odom系中的变换
-        // double odom_x, odom_y;
         point.odom_x = laser_x * cos(base_in_odom_angle) - laser_y * sin(base_in_odom_angle) + base_in_odom_pos.x();
         point.odom_y = laser_x * sin(base_in_odom_angle) + laser_y * cos(base_in_odom_angle) + base_in_odom_pos.y();
         
-        // TODO:===================================START===多线程未完成==============================================
+        // TODO:===================================START=================================================
         
         std::pair<int, int> point_cell_xy = map->getCellIndex(point.odom_x, point.odom_y);
         std::pair<int, int> base_cell_xy = map->getCellIndex(base_in_odom_pos.x(), base_in_odom_pos.y());
 //         
         this->caster.Bresenham(base_cell_xy.first, base_cell_xy.second,point_cell_xy.first, point_cell_xy.second, this->caster.grid_index_vec);
 //         
-//         // 展示划线效果
 //         std::thread t1([=](){this->showLine();});
 //         t1.detach();
         this->showLine();
-//         // 将索引返还
 //         for (auto &grid: (this->caster.grid_index_vec))
 //         {
 //             std::pair<double,double> grid_ =  this->map->fromCellIndex(grid.first,grid.second);
 //             
 //             
-//             // 如果直接展示线程会发生堵塞，因此必须多线程
 // //             this->showPoint(grid_.first,grid_.second);
-//             // lambda表达式
 //         }
 //         t1.join();
 //         this->caster.grid_index_vec.clear();
@@ -205,14 +194,14 @@ bool Tester::getLaserPose(tf::Stamped<tf::Pose> &odom_pose, ros::Time dt, tf::Tr
         robot_pose.setIdentity();
         // lidar_link
         robot_pose.frame_id_ = "base_link";
-        robot_pose.stamp_ = dt;   //设置为ros::Time()表示返回最近的转换关系
+        robot_pose.stamp_ = dt;  
 //         std::cout<<dt<<std::endl;
 
         // get the global pose of the robot
         try
         {
             // ROS_INFO("debug!!!");
-            if(!tf_->waitForTransform("/odom", "/base_link", dt, ros::Duration(0.5)))             // 0.15s 的时间可以修改
+            if(!tf_->waitForTransform("/odom", "/base_link", dt, ros::Duration(0.5)))       
             {
                 ROS_ERROR("LidarMotion-Can not Wait Transform()");
                 return false;
@@ -298,10 +287,10 @@ void Tester::showLine()
 
 void getParamFromYaml(int &map_size_x, int &map_size_y, double &map_resolution, bool &calib)
 {
-    ros::param::get("~map_size_x_",map_size_x);  // x方向栅格数目
-    ros::param::get("~map_size_y_",map_size_y);  // y方向栅格数目
-    ros::param::get("~resolution_",map_resolution);  // m/格子
-    ros::param::get("~calib",calib);  // 是否进行激光雷达数据矫正
+    ros::param::get("~map_size_x_",map_size_x); 
+    ros::param::get("~map_size_y_",map_size_y);  
+    ros::param::get("~resolution_",map_resolution); 
+    ros::param::get("~calib",calib); 
 }
 
 int main (int argc, char** argv) {
@@ -312,8 +301,6 @@ int main (int argc, char** argv) {
     bool calib;
     getParamFromYaml(map_size_x, map_size_y, map_resolution, calib);
     tf::TransformListener tf(ros::Duration(10.0));
-    // 300*300的栅格，分辨率为0.1m/格
-    // MapBuilder map_builder(300, 300, 0.1, &tf);
     Tester tester(map_size_x, map_size_y, map_resolution, &tf);
     ros::spin();
 
